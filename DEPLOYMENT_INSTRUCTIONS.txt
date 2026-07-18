@@ -1,0 +1,14 @@
+NETLIFY DEPLOYMENT
+
+1. Download Love357_AI_V1_Beta_Release.zip.
+2. Extract the ZIP on your phone or computer.
+3. Open Netlify and choose your existing site.
+4. Go to Deploys.
+5. Drag the Love357_AI_V1_Beta folder into the deployment area.
+   On mobile, you may need to upload the extracted folder files through GitHub instead.
+6. Wait for the deploy to finish and open the Netlify URL.
+7. Test in a private/incognito window so the setup wizard starts with clean data.
+
+For a brand-new Netlify Drop, drag the Love357_AI_V1_Beta folder to app.netlify.com/drop. Netlify will create a new URL.
+
+Before inviting customers, tell them this is a Founders Circle Beta and not to enter sensitive financial, medical, or confidential information.
