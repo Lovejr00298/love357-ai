@@ -18,9 +18,31 @@
 @media(max-width:980px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.sidefoot{position:static;margin-top:18px}.nav{grid-template-columns:repeat(3,1fr)}.grid4{grid-template-columns:repeat(2,1fr)}.grid3,.grid2,.price-grid{grid-template-columns:1fr}}@media(max-width:620px){.main{padding:16px}.nav{grid-template-columns:1fr 1fr}.grid4,.form-grid,.choice-grid,.tutorial-grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.hero h2{font-size:24px}}
 
 .statusline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;font-size:11px;font-weight:900;border:1px solid var(--line)}.status.preview{background:#403719;color:#ffe08a}.status.connected{background:#164337;color:#a7f6d4}.status.activation{background:#362c57;color:#d8cfff}.connector{display:flex;gap:14px;align-items:center;padding:15px;border:1px solid var(--line);border-radius:15px;background:#0b1a30;margin-bottom:10px}.connector .icon{width:44px;height:44px;display:grid;place-items:center;border-radius:13px;background:#173352;font-size:22px}.connector .grow{flex:1}.connector p{margin:4px 0;color:var(--muted);font-size:12px;line-height:1.45}.roadmap-card{position:relative;overflow:hidden}.roadmap-card:after{content:"COMING SOON";position:absolute;right:-35px;top:18px;transform:rotate(35deg);background:#6554ca;padding:5px 38px;font-size:9px;font-weight:950}.calllog{max-height:330px;overflow:auto}.notice{padding:12px 14px;border:1px solid #66562a;border-radius:12px;background:#302817;color:#ffe9a9;font-size:12px;line-height:1.5}.outcome{padding:14px;border:1px solid var(--line);border-radius:13px;background:#09172a;min-height:90px;white-space:pre-wrap}.hero-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:15px 0}.hero-list div{padding:10px 12px;border-radius:11px;background:rgba(7,16,31,.35);border:1px solid rgba(255,255,255,.12);font-size:13px}.founder-badge{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:linear-gradient(135deg,#5745a5,#315d9f);font-size:11px;font-weight:900}
+
+/* Production authentication shell */
+.auth-gate{position:fixed;inset:0;z-index:120;background:radial-gradient(circle at 80% 0,#1b3c6b 0,transparent 36%),#07101f;display:grid;place-items:center;padding:20px}
+.auth-card{width:min(470px,100%);padding:26px;border:1px solid #365377;border-radius:22px;background:#0e1e36;box-shadow:0 35px 90px rgba(0,0,0,.55)}
+.auth-card h1{margin:0 0 6px;font-size:27px}.auth-card p{color:var(--muted);line-height:1.55}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}.auth-tabs button{border:1px solid var(--line);background:#0b1a30;color:var(--muted);padding:10px;border-radius:10px;font-weight:850}.auth-tabs button.active{background:#1d385d;color:#fff;border-color:#5279aa}.auth-error{min-height:20px;color:#ffb7c1;font-size:12px;margin:8px 0}.auth-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}.cloud-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 9px;border-radius:999px;background:#173352;border:1px solid #355b84;font-size:11px;font-weight:850}.cloud-badge.live{background:#164337;color:#a7f6d4}.cloud-badge.local{background:#403719;color:#ffe08a}
+
 </style>
 </head>
 <body>
+
+<div id="authGate" class="auth-gate">
+  <div class="auth-card">
+    <div class="brand">Love <span>357 AI</span><small>PRODUCTION FOUNDATION • SECURE ACCOUNT ACCESS</small></div>
+    <h1 id="authHeading" style="margin-top:20px">Welcome back</h1>
+    <p id="authSubheading">Sign in to your private executive workspace.</p>
+    <div class="auth-tabs"><button id="loginTab" class="active" type="button">Sign In</button><button id="signupTab" type="button">Create Account</button></div>
+    <div class="field" id="nameField" style="display:none"><label>Your name</label><input id="authName" autocomplete="name" placeholder="Earl Love Jr."></div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@business.com"></div>
+    <div class="field"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 8 characters"></div>
+    <div id="authError" class="auth-error"></div>
+    <div class="actions"><button id="authSubmit" class="btn" type="button">Sign In</button><button id="previewButton" class="btn ghost" type="button">Open Local Preview</button></div>
+    <p class="auth-note">Secure cloud accounts activate after your Supabase project keys are added to <strong>config.js</strong>. Local Preview keeps data on this device for development and demonstrations.</p>
+  </div>
+</div>
+
 <div class="shell">
 <aside class="sidebar">
  <div class="brand">Love <span>357 AI</span><small>AI EXECUTIVE ASSISTANT • FOUNDER BETA 1.3</small></div>
@@ -28,7 +50,7 @@
  <nav class="nav" id="nav">
   <button class="active" data-page="dashboard">Dashboard</button><button data-page="assistant">Executive Assistant</button><button data-page="voice">Voice Reception</button><button data-page="connections">Email & Calendar</button><button data-page="actionplan">Action Plan</button><button data-page="tasks">Priorities</button><button data-page="contacts">Customers</button><button data-page="reports">Reports</button><button data-page="learning">Learning Center</button><button data-page="team">Founder Roadmap</button><button data-page="pricing">Pricing</button><button data-page="admin">Owner Admin</button><button data-page="feedback">Feedback</button><button data-page="settings">Settings</button>
  </nav>
- <div class="sidefoot"><button class="btn" onclick="openSetup(true)">Run Business Setup</button><button class="btn ghost" onclick="exportData()">Export My Data</button><button class="btn ghost" onclick="clearConversation()">Clear Conversation</button><button class="btn danger" onclick="exitProgram()">Exit Program</button></div>
+ <div class="sidefoot"><div id="cloudStatus" class="cloud-badge local">● Local Preview</div><button class="btn" onclick="openSetup(true)">Run Business Setup</button><button class="btn ghost" onclick="exportData()">Export My Data</button><button class="btn ghost" onclick="clearConversation()">Clear Conversation</button><button id="signOutButton" class="btn ghost" type="button">Sign Out</button><button class="btn danger" onclick="exitProgram()">Exit Program</button></div>
 </aside>
 <main class="main">
  <div class="top"><div><h1 id="pageTitle">Executive Dashboard</h1><p id="pageSub">Your daily command center.</p></div><div class="pill"><span class="dot"></span> Beta Ready</div></div>
@@ -285,4 +307,6 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function renderAll(){document.getElementById('sideBusiness').textContent=state.profile.business||'Your Business';document.getElementById('sideMode').textContent=state.profile.setupComplete?`${state.profile.experience} guidance • ${state.profile.industry}`:'Guided business workspace';document.getElementById('trialText').textContent=trialDays()>0?`${trialDays()} day${trialDays()===1?'':'s'} remaining • Test data is preserved on this device`:'Trial ended • Submit an upgrade request to continue';renderDashboard();renderVoice();renderConnections();renderTeam();renderTasks();renderContacts();renderChat();renderActionPlan();generateReport();renderLearning();renderAdmin();renderSettings()}
 document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});renderAll();if(!state.profile.setupComplete)setTimeout(()=>openSetup(),450);
 </script>
+<script src="config.js"></script>
+<script type="module" src="auth-cloud.js"></script>
 </body></html>
