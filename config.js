@@ -1,8 +1,8 @@
-// LOVE357 AI production configuration
-// Supabase URL and anon key are safe for browser use when Row Level Security is enabled.
+
 window.LOVE357_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: "",
-  appName: "LOVE357 AI Executive Assistant",
-  environment: "development"
+  SUPABASE_URL: "https://iqimqknagxggokleptjo.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_EDvaeUF7XopivLt91T4AMw_Rb47gCAs",
+
+  APP_NAME: "LOVE357 AI Executive Assistant",
+  VERSION: "2.0"
 };
