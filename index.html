@@ -307,6 +307,6 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function renderAll(){document.getElementById('sideBusiness').textContent=state.profile.business||'Your Business';document.getElementById('sideMode').textContent=state.profile.setupComplete?`${state.profile.experience} guidance • ${state.profile.industry}`:'Guided business workspace';document.getElementById('trialText').textContent=trialDays()>0?`${trialDays()} day${trialDays()===1?'':'s'} remaining • Test data is preserved on this device`:'Trial ended • Submit an upgrade request to continue';renderDashboard();renderVoice();renderConnections();renderTeam();renderTasks();renderContacts();renderChat();renderActionPlan();generateReport();renderLearning();renderAdmin();renderSettings()}
 document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat()});renderAll();if(!state.profile.setupComplete)setTimeout(()=>openSetup(),450);
 </script>
-<script src="config.js"></script>
-<script type="module" src="auth-cloud.js"></script>
+<script src="config.js?v=bff4893"></script>
+<script type="module" src="auth-cloud.js?v=bff4893"></script>
 </body></html>
