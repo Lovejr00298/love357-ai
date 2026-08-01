@@ -1,8 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-if (!window.LOVE357_CONFIG) {
-  await import("./config.js?v=20260731");
-}
-const cfg = window.LOVE357_CONFIG || {};
+const cfg = {
+  supabaseUrl: "https://iqimqknagxggokleptjo.supabase.co",
+  supabaseAnonKey: "sb_publishable_EDvaeUF7XopivLt91T4AMw_Rb47gCAs"
+};
 const configured = Boolean(cfg.supabaseUrl && cfg.supabaseAnonKey);
 const gate = document.getElementById("authGate");
 const email = document.getElementById("authEmail");
