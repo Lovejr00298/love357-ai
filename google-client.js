@@ -1,6 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const cfg = window.LOVE357_CONFIG || {};
+const cfg = window.LOVE357_CONFIG || {
+  supabaseUrl: "https://iqimqknagxggokleptjo.supabase.co",
+  supabaseAnonKey: "sb_publishable_EDvaeUF7XopivLt91T4AMw_Rb47gCAs"
+};
+
 const supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
 
 async function sessionToken() {
