@@ -237,7 +237,35 @@ function saveFeedback(){state.feedback={score:val('feedbackScore'),best:val('fee
 function integrationLabel(v){return v==='connected'?['Connected','connected']:v==='requested'?['Activation Requested','preview']:['Activation Required','activation']}
 const connectorMeta={gmail:['✉️','Gmail','Important email summaries, drafts, and follow-up reminders.'],outlookMail:['📨','Outlook Email','Microsoft inbox summaries and response support.'],googleCalendar:['📅','Google Calendar','Daily agendas, conflict detection, and appointment availability.'],outlookCalendar:['🗓️','Outlook Calendar','Microsoft scheduling, meeting preparation, and availability.']};
 function renderConnections(){const make=(key)=>{const m=connectorMeta[key],st=integrationLabel(state.integrations[key]);return `<div class="connector"><div class="icon">${m[0]}</div><div class="grow"><strong>${m[1]}</strong><p>${m[2]}</p><span class="status ${st[1]}">${st[0]}</span></div><button class="btn ${state.integrations[key]==='requested'?'ghost':'secondary'} small" onclick="requestIntegration('${key}')">${state.integrations[key]==='requested'?'Cancel Request':'Prepare Connection'}</button></div>`};document.getElementById('emailConnectors').innerHTML=make('gmail')+make('outlookMail');document.getElementById('calendarConnectors').innerHTML=make('googleCalendar')+make('outlookCalendar')}
-function requestIntegration(key){state.integrations[key]=state.integrations[key]==='requested'?'activation':'requested';save();toast(state.integrations[key]==='requested'?'Connection added to your activation plan.':'Connection request removed.')}
+async function requestIntegration(key) {
+  if (state.integrations[key] === 'requested') {
+    state.integrations[key] = 'activation';
+    save();
+    renderConnections();
+    toast('Connection request canceled.');
+    return;
+  }
+
+  if (key === 'gmail' || key === 'googleCalendar') {
+    if (!window.LOVE357_GOOGLE?.connect) {
+      toast('Google connection is still loading. Refresh the page and try again.');
+      return;
+    }
+
+    try {
+      toast('Opening Google authorization...');
+      await window.LOVE357_GOOGLE.connect();
+    } catch (error) {
+      toast(error?.message || 'Unable to start Google authorization.');
+    }
+    return;
+  }
+
+  state.integrations[key] = 'requested';
+  save();
+  renderConnections();
+  toast('Connection added to your activation plan.');
+}
 function renderVoice(){const cs=document.getElementById('conversationStatus');if(cs){const c=state.voice.conversation;cs.textContent=c?(c.completed?'Last caller intake completed. Start a new caller to test again.':`Active conversation: ${c.intent||'identifying caller need'} — question ${c.step+1}.`):'No active caller conversation.';}autoConfigureBusiness();const v=state.voice||defaults.voice;for(const [id,key] of [['vName','name'],['vGreeting','greeting'],['vHours','hours'],['vTransfer','transfer'],['vKnowledge','knowledge'],['vEscalation','escalation'],['vAfter','afterHours']]){const el=document.getElementById(id);if(el&&document.activeElement!==el)el.value=v[key]||''}const k=v.generatedKnowledge||autoConfigureBusiness(),book=getPlaybook(),profile=document.getElementById('adaptiveProfile');if(profile)profile.innerHTML=`<strong>${esc(state.profile.business||'Your business')} SuperAgent</strong>\nIndustry configuration: ${esc(k.industry)}\nActive roles: ${esc((v.roles||book.roles).join(', '))}\nBusiness description: ${esc(k.description)}<br>Services understood: ${esc(k.services)}<br>Expert topics: ${esc((k.expertTopics||[]).join(', ')||'Add expert topics in Settings')}<br>Approved FAQs: ${esc((k.faqs||[]).map(x=>x.q).join('; ')||'Add FAQs in Settings')}\nService area: ${esc(k.serviceArea)}\nPricing rule: ${esc(k.pricing)}\nPolicies: ${esc(k.policies)}\n\nSuggested caller questions:\n• ${k.questions.map(esc).join('\n• ')}\n\nUrgent triggers:\n• ${k.urgent.map(esc).join('\n• ')}`;const logs=v.calls||[];document.getElementById('callLog').innerHTML=logs.length?logs.slice().reverse().map(c=>`<div class="item"><div class="rank">☎</div><div><strong>${esc(c.intent)}</strong><p>${esc(c.time)} • ${esc(c.caller)}</p><span class="impact">${esc(c.outcome)}</span></div></div>`).join(''):'<p class="muted">No browser test calls have been recorded.</p>'}
 function saveVoice(){state.voice={...state.voice,name:val('vName')||'Ava',greeting:val('vGreeting')||`Thank you for calling ${state.profile.business||'our business'}. This is ${val('vName')||'Ava'}. How can I help you today?`,hours:val('vHours')||state.profile.hours,transfer:val('vTransfer'),knowledge:val('vKnowledge'),escalation:val('vEscalation'),afterHours:val('vAfter'),status:'browser-demo'};autoConfigureBusiness();save();toast('SuperAgent configuration saved and adapted to the business profile.')}
 function testVoiceGreeting(){saveVoice();if('speechSynthesis'in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(state.voice.greeting);u.rate=.94;u.pitch=1.02;speechSynthesis.speak(u);toast('Playing browser voice test.')}else toast('Voice playback is not supported in this browser.')}
