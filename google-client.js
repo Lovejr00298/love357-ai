@@ -1,12 +1,16 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const cfg = window.LOVE357_CONFIG || {
-  supabaseUrl: "https://iqimqknagxggokleptjo.supabase.co",
-  supabaseAnonKey: "sb_publishable_EDvaeUF7XopivLt91T4AMw_Rb47gCAs"
-};
+const cfg = window.LOVE357_CONFIG || {};
 
-const supabase = createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+const supabaseUrl =
+  cfg.supabaseUrl ||
+  "https://iqimqknagxggokleptjo.supabase.co";
 
+const supabaseAnonKey =
+  cfg.supabaseAnonKey ||
+  "sb_publishable_EDvaeUF7XopivLt91T4AMw_Rb47gCAs";
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 async function sessionToken() {
   const { data: { session }, error } = await supabase.auth.getSession();
   if (error || !session?.access_token) {
